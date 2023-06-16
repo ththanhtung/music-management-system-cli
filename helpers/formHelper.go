@@ -91,20 +91,24 @@ func (h *Helper) SearchForTrackAndPlaylist(ml *models.MusicLibrary) {
 	fmt.Println("3. Search by album")
 	fmt.Println("4. Search by genre")
 
-	choice := h.GetInputInt("Enter your choice")
+	choice := h.GetInputInt("Enter your choice: ")
 
 	switch choice {
 	case 1:
-		title := h.GetInputString("Enter track's title:")
-		ml.DisplayTrackAndLibraryByTitle(title)
+		title := h.GetInputString("Enter track's title: ")
+		result := ml.SearchTracksAndPlaylistsByTitle(title)
+		ml.DisplayTrackAndLibrary(result)
 	case 2:
-		title := h.GetInputString("Enter artist:")
-		ml.DisplayTrackAndLibraryByTitle(title)
+		title := h.GetInputString("Enter artist: ")
+		result := ml.SearchTracksAndPlaylistsByArtist(title)
+		ml.DisplayTrackAndLibrary(result)
 	case 3:
-		title := h.GetInputString("Enter album:")
-		ml.DisplayTrackAndLibraryByTitle(title)
+		title := h.GetInputString("Enter album: ")
+		result := ml.SearchTracksAndPlaylistsByAlbum(title)
+		ml.DisplayTrackAndLibrary(result)
 	case 4:
-		title := h.GetInputString("Enter genre:")
-		ml.DisplayTrackAndLibraryByTitle(title)
+		title := h.GetInputString("Enter genre: ")
+		result := ml.SearchTracksAndPlaylistsByGenre(title)
+		ml.DisplayTrackAndLibrary(result)
 	}
 }
