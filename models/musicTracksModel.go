@@ -61,6 +61,16 @@ func (m *MusicTracks) SearchForTracksByTitle(title string) []*MusicTrackItem {
 	return results
 }
 
+func (m *MusicTracks) SearchForTracksByArtist(artist string) []*MusicTrackItem {
+	results := []*MusicTrackItem{}
+	for _, track := range m.Tracks {
+		if strings.Contains(strings.ToLower(track.Artist), strings.ToLower(artist)) {
+			results = append(results, track)
+		}
+	}
+	return results
+}
+
 func (m *MusicTracks) DisplayAll() {
 	for _, track := range m.Tracks {
 		track.DisplayInfo()
