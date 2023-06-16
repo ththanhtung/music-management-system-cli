@@ -28,7 +28,8 @@ func (c *Controller) loop() {
 		fmt.Println("5. Display all music tracks")
 		fmt.Println("6. Create a playlist")
 		fmt.Println("7. Add a track to a playlist")
-		fmt.Println("8. Exit")
+		fmt.Println("8. Search music tracks and playlists")
+		fmt.Println("9. Exit")
 
 		choice := helpers.GetInputInt("Enter your choice: ")
 
@@ -95,6 +96,15 @@ func (c *Controller) loop() {
 				}
 			}
 		case 8:
+			search := helpers.GetInputString("Enter music track or playlist name: ")
+			searchResults := searchMusicTracksAndPlaylists(library, search)
+			helpers.ClearConsole()
+			if len(searchResults) == 0 {
+				fmt.Println("No search results found!")
+			} else {
+				displaySearchResults(searchResults)
+			}
+		case 9:
 			fmt.Println("Exiting...")
 			return
 		default:

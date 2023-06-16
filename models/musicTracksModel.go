@@ -1,5 +1,7 @@
 package models
 
+import "strings"
+
 type MusicTracks struct {
 	Tracks map[string]*MusicTrackItem
 }
@@ -31,26 +33,35 @@ func (m *MusicTracks) UpdateMusicTrack(mt *MusicTrackItem, title, artist, album,
 	}
 }
 
-func (m *MusicTracks) GetTrackByName(trackName string) *MusicTrackItem{
-	for _, track := range m.Tracks{
-		if track.Title == trackName{
+func (m *MusicTracks) GetTrackByName(trackName string) *MusicTrackItem {
+	for _, track := range m.Tracks {
+		if track.Title == trackName {
 			return track
 		}
 	}
 	return nil
 }
 
-func (m *MusicTracks) GetTrackByID(id string) *MusicTrackItem{
-	for _, track := range m.Tracks{
-		if track.ID == id{
+func (m *MusicTracks) GetTrackByID(id string) *MusicTrackItem {
+	for _, track := range m.Tracks {
+		if track.ID == id {
 			return track
 		}
 	}
 	return nil
 }
 
+func (m *MusicTracks) SearchForTracksByTitle(title string) []*MusicTrackItem {
+	results := []*MusicTrackItem{}
+	for _, track := range m.Tracks {
+		if strings.Contains(strings.ToLower(track.Title), strings.ToLower(title)) {
+			results = append(results, track)
+		}
+	}
+	return results
+}
 
-func (m *MusicTracks) DisplayAll(){
+func (m *MusicTracks) DisplayAll() {
 	for _, track := range m.Tracks {
 		track.DisplayInfo()
 	}
