@@ -2,17 +2,25 @@ package helpers
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"os/exec"
 	"runtime"
+	"time"
 )
 
-func ClearInputBuffer() {
+type Helper struct{}
+
+func NewHelper()*Helper{
+	return &Helper{}
+}
+
+func (h *Helper) ClearInputBuffer() {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 }
 
-func ClearConsole() {
+func (h *Helper) ClearConsole() {
 	var cmd *exec.Cmd
 
 	if runtime.GOOS == "windows" {
@@ -23,4 +31,9 @@ func ClearConsole() {
 
 	cmd.Stdout = os.Stdout
 	cmd.Run()
+}
+
+func (h *Helper) RandomID() string {
+	randomID := fmt.Sprint(time.Now().UnixNano())
+	return randomID
 }
