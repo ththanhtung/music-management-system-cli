@@ -91,7 +91,6 @@ func (m *MusicTracks) SearchForTracksByGenry(genre string) []*MusicTrackItem {
 	return results
 }
 
-
 func (m *MusicTracks) DisplayAll() {
 	for _, track := range m.Tracks {
 		track.DisplayInfo()

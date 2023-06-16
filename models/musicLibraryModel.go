@@ -1,6 +1,9 @@
 package models
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type MusicLibraryItem struct {
 	PlaylistID string
@@ -14,7 +17,7 @@ type MusicLibrary struct {
 }
 
 type Helpers interface {
-	RandomID()string
+	RandomID() string
 }
 
 func NewMusicLibrary(helpers Helpers) *MusicLibrary {
@@ -51,5 +54,47 @@ func (ml *MusicLibrary) DisplayAllTrackFromPlaylist(playlistName string) {
 	for i, track := range tracks {
 		fmt.Println("Track", i+1)
 		track.DisplayInfo()
+	}
+}
+
+func (ml *MusicLibrary) SearchTracksAndPlaylistsByTitle(searchTerm string) map[string][]interface{} {
+	results := make(map[string][]interface{})
+
+	// Search for tracks
+	for _, track := range ml.MusicTracks.Tracks {
+	    if strings.Contains(strings.ToLower(track.Title), strings.ToLower(searchTerm)) {
+	        results["Tracks"] = append(results["Tracks"], track)
+	    }
+	}
+
+	// Search for playlists that contain the tracks
+	for _, libraryItem := range ml.MusicLibraries {
+		if _, ok := results["Tracks"]; ok {
+			// Check if this library item's track ID is in the results
+			for _, track := range results["Tracks"] {
+				if track.(*MusicTrackItem).ID == libraryItem.TrackID {
+					// Get the playlist from the playlists map
+					playlist := ml.Playlists.GetPlaylistByID(libraryItem.PlaylistID)
+					results["Playlists"] = append(results["Playlists"], playlist)
+					results["TracksInPlaylists"] = append(results["TracksInPlaylists"], track)
+				}
+			}
+		}
+	}
+
+	return results
+}
+
+func (ml *MusicLibrary) DisplayTrackAndLibraryByTitle(searchTerm string) {
+	results := ml.SearchTracksAndPlaylistsByTitle(searchTerm)
+	fmt.Println("Tracks:")
+	for _, track := range results["Tracks"] {
+		fmt.Println(track.(*MusicTrackItem).Title)
+	}
+	fmt.Println("Playlists:")
+	for i, playlist := range results["Playlists"] {
+		fmt.Println("-", playlist.(*PlaylistItem).Name)
+		tracksInPlaylist := results["TracksInPlaylists"][i].(*MusicTrackItem)
+		fmt.Println("  -", tracksInPlaylist.Title)
 	}
 }

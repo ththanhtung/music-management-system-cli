@@ -84,8 +84,8 @@ func (h *Helper) SelectPlaylist(playlists *models.Playlists) *models.PlaylistIte
 	return playlists.GetPlaylistByID(fmt.Sprint(choice))
 }
 
-func (h *Helper) SearchForTrack() {
-	fmt.Println("\n---- Search For Track ----")
+func (h *Helper) SearchForTrackAndPlaylist(ml *models.MusicLibrary) {
+	fmt.Println("\n---- Search For Track and playlist ----")
 	fmt.Println("1. Search by title")
 	fmt.Println("2. Search by artist")
 	fmt.Println("3. Search by album")
@@ -93,7 +93,18 @@ func (h *Helper) SearchForTrack() {
 
 	choice := h.GetInputInt("Enter your choice")
 
-	if choice > 0 && choice <= 4 {
-		
+	switch choice {
+	case 1:
+		title := h.GetInputString("Enter track's title:")
+		ml.DisplayTrackAndLibraryByTitle(title)
+	case 2:
+		title := h.GetInputString("Enter artist:")
+		ml.DisplayTrackAndLibraryByTitle(title)
+	case 3:
+		title := h.GetInputString("Enter album:")
+		ml.DisplayTrackAndLibraryByTitle(title)
+	case 4:
+		title := h.GetInputString("Enter genre:")
+		ml.DisplayTrackAndLibraryByTitle(title)
 	}
 }

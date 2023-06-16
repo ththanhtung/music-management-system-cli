@@ -96,14 +96,8 @@ func (c *Controller) loop() {
 				}
 			}
 		case 8:
-			search := helpers.GetInputString("Enter music track or playlist name: ")
-			searchResults := searchMusicTracksAndPlaylists(library, search)
 			helpers.ClearConsole()
-			if len(searchResults) == 0 {
-				fmt.Println("No search results found!")
-			} else {
-				displaySearchResults(searchResults)
-			}
+			helpers.SearchForTrackAndPlaylist(library)
 		case 9:
 			fmt.Println("Exiting...")
 			return

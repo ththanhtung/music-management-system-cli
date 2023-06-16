@@ -2,7 +2,6 @@ package helpers
 
 import (
 	"fmt"
-	"mms/models"
 )
 
 func (h *Helper) GetInputInt(msg string) int {
