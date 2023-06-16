@@ -21,39 +21,22 @@ func (h *Helper) GetInputInt(msg string) int {
 }
 
 func (h *Helper) GetInputString(msg string) string {
-	for {
-		fmt.Print(msg)
-		var input string
-		_, err := fmt.Scanln(&input)
 
-		if err != nil {
-			fmt.Println("Invalid input, please enter a valid string.")
-			// Clear the input buffer
-			h.ClearConsole()
-			continue
-		}
-		return input
-	}
-}
-func(h *Helper) GetInputWithDefaultString(msg, defaultValue string) string {
-	for {
-		fmt.Print(msg)
-		var input string
-		_, err := fmt.Scanln(&input)
+	fmt.Print(msg)
+	var input string
+	fmt.Scanln(&input)
+	return input
 
-		if err != nil {
-			fmt.Println("Invalid input, please enter a valid string.")
-			// Clear the input buffer
-			h.ClearConsole()
-			continue
-		}
-		if input == "" {
-			return defaultValue
-		}
-		return input
-	}
 }
-func(h *Helper) GetInputWithDefaultInt(msg string, defaultValue int) int {
+func (h *Helper) GetInputWithDefaultString(msg, defaultValue string) string {
+	input := h.GetInputString(msg)
+
+	if input == "" {
+		return defaultValue
+	}
+	return input
+}
+func (h *Helper) GetInputWithDefaultInt(msg string, defaultValue int) int {
 	for {
 		fmt.Print(msg)
 		var input int
@@ -71,4 +54,3 @@ func(h *Helper) GetInputWithDefaultInt(msg string, defaultValue int) int {
 		return input
 	}
 }
-

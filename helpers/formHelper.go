@@ -51,12 +51,12 @@ func (h *Helper) GetUpdatedMusicTrackDetail(track *models.MusicTrackItem) models
 		updatedTrack.Genre = newGenre
 	}
 
-	newReleaseYear := h.GetInputWithDefaultInt("Enter new Release Year (leave blank to keep current value): ", track.ReleaseYear)
+	newReleaseYear := h.GetInputWithDefaultInt("Enter new Release Year (type -1 to keep current value): ", track.ReleaseYear)
 	if newReleaseYear != -1 {
 		updatedTrack.ReleaseYear = newReleaseYear
 	}
 
-	newDuration := h.GetInputWithDefaultInt("Enter new Duration (in seconds) (leave blank to keep current value): ", track.Duration)
+	newDuration := h.GetInputWithDefaultInt("Enter new Duration (in seconds) (type -1 to keep current value): ", track.Duration)
 	if newDuration != -1 {
 		updatedTrack.Duration = newDuration
 	}
