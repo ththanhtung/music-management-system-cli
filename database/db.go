@@ -7,6 +7,7 @@ import (
 )
 
 // for simplicity i will use json as database
+// responsible for storing and reading data
 
 func ReadMapFromDB[T any](filename string) (map[string]*T, error) {
 	// Read the JSON file

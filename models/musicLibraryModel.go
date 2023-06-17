@@ -170,7 +170,10 @@ func (ml *MusicLibrary) SearchTracksAndPlaylistsByGenre(searchTerm string) map[s
 				if track.(*MusicTrackItem).ID == libraryItem.TrackID {
 					// Get the playlist from the playlists map
 					playlist := ml.Playlists.GetPlaylistByID(libraryItem.PlaylistID)
-					results["Playlists"] = append(results["Playlists"], playlist)
+					_, ok := results["Playlists"]
+					if !ok {
+						results["Playlists"] = append(results["Playlists"], playlist)
+					}
 					results["TracksInPlaylists"] = append(results["TracksInPlaylists"], track)
 				}
 			}
