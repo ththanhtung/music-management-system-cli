@@ -40,3 +40,36 @@ func SaveMapToDB[T any](filename string, item T) error {
 
 	return nil
 }
+
+func ReadSliceFromDB[T any](filename string) ([]*T, error) {
+	// Read the JSON file
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	// Unmarshal the JSON data into a slice of *MusicLibraryItem
+	var items []*T
+	err = json.Unmarshal(data, &items)
+	if err != nil {
+		return nil, err
+	}
+
+	return items, nil
+}
+
+func SaveSliceToDB[T any](filename string, items []*T) error {
+	// Convert the data to JSON
+	jsonData, err := json.Marshal(items)
+	if err != nil {
+		return err
+	}
+
+	// Write the JSON data to the file
+	err = ioutil.WriteFile(filename, jsonData, 0644)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

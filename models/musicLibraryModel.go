@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"mms/database"
 	"strings"
 )
 
@@ -15,18 +16,33 @@ type Helpers interface {
 	RandomID() string
 }
 
+var librariesURI string = "./database/libraries.json"
+
 func NewMusicLibrary(helpers Helpers) *MusicLibrary {
-	return &MusicLibrary{
-		MusicTracks:    NewMusicTracks(helpers),
-		Playlists:      NewPlaylists(helpers),
-		MusicLibraries: make([]*MusicLibraryItem, 0),
-	}
+	musicLibraby := &MusicLibrary{}
+	musicLibraby.MusicTracks = NewMusicTracks(helpers)
+	musicLibraby.Playlists = NewPlaylists(helpers)
+	librariesFromDB,_:=database.ReadSliceFromDB[MusicLibraryItem](librariesURI)
+	musicLibraby.MusicLibraries = librariesFromDB
+	return musicLibraby
+
+	// return &MusicLibrary{
+	// 	MusicTracks:    NewMusicTracks(helpers),
+	// 	Playlists:      NewPlaylists(helpers),
+	// 	MusicLibraries: make([]*MusicLibraryItem, 0),
+	// }
 }
 
 func (ml *MusicLibrary) AddTrackToPlaylist(trackName, playlistName string) {
 	track := ml.MusicTracks.GetTrackByName(trackName)
 	playlist := ml.Playlists.GetPlaylistByName(playlistName)
 	ml.MusicLibraries = append(ml.MusicLibraries, &MusicLibraryItem{PlaylistID: playlist.ID, TrackID: track.ID})
+
+	// assign like this to avoid nil pointer
+	if ml.MusicLibraries == nil {
+		ml.MusicLibraries = make([]*MusicLibraryItem, 0)
+	}
+	database.SaveSliceToDB[MusicLibraryItem](librariesURI, ml.MusicLibraries)
 }
 
 func (ml *MusicLibrary) GetAllTrackFromPlaylist(playlistName string) []*MusicTrackItem {
