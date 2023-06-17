@@ -3,6 +3,7 @@ package helpers
 import (
 	"fmt"
 	"mms/models"
+	"time"
 )
 
 func (h *Helper) GetMusicTrackDetail() *models.MusicTrackItem {
@@ -10,17 +11,17 @@ func (h *Helper) GetMusicTrackDetail() *models.MusicTrackItem {
 
 	fmt.Println("\n---- Add a New Music Track ----")
 
-	track.Title = h.GetInputString("Enter Title: ")
+	track.Title = h.GetInputStringWithConstraint("Enter Title: ", "default title", 1, 100)
 
-	track.Artist = h.GetInputString("Enter Artist: ")
+	track.Artist = h.GetInputStringWithConstraint("Enter Artist: ", "default artist", 2, 100)
 
-	track.Album = h.GetInputString("Enter Album: ")
+	track.Album = h.GetInputStringWithConstraint("Enter Album: ", "default album", 1, 100)
 
-	track.Genre = h.GetInputString("Enter Genre: ")
+	track.Genre = h.GetInputStringWithConstraint("Enter Genre: ", "default genre", 1, 100)
 
-	track.ReleaseYear = h.GetInputInt("Enter Release Year: ")
+	track.ReleaseYear = h.GetInputIntWithConstraint("Enter Release Year(1900-current year): ", time.Now().Year(), 1900, time.Now().Year())
 
-	track.Duration = h.GetInputInt("Enter Duration (in seconds): ")
+	track.Duration = h.GetInputIntWithConstraint("Enter Duration (in seconds): ", 0, 0, 10000)
 
 	return track
 }
@@ -31,32 +32,32 @@ func (h *Helper) GetUpdatedMusicTrackDetail(track *models.MusicTrackItem) models
 
 	updatedTrack := *track
 
-	newTitle := h.GetInputWithDefaultString("Enter new Title (leave blank to keep current value): ", track.Title)
+	newTitle := h.GetInputStringWithConstraint("Enter new Title (leave blank to keep current value): ", track.Title, 1, 100)
 	if newTitle != "" {
 		updatedTrack.Title = newTitle
 	}
 
-	newArtist := h.GetInputWithDefaultString("Enter new Artist (leave blank to keep current value): ", track.Artist)
+	newArtist := h.GetInputStringWithConstraint("Enter new Artist (leave blank to keep current value): ", track.Artist, 2, 100)
 	if newArtist != "" {
 		updatedTrack.Artist = newArtist
 	}
 
-	newAlbum := h.GetInputWithDefaultString("Enter new Album (leave blank to keep current value): ", track.Album)
+	newAlbum := h.GetInputStringWithConstraint("Enter new Album (leave blank to keep current value): ", track.Album, 1, 100)
 	if newAlbum != "" {
 		updatedTrack.Album = newAlbum
 	}
 
-	newGenre := h.GetInputWithDefaultString("Enter new Genre (leave blank to keep current value): ", track.Genre)
+	newGenre := h.GetInputStringWithConstraint("Enter new Genre (leave blank to keep current value): ", track.Genre, 1, 100)
 	if newGenre != "" {
 		updatedTrack.Genre = newGenre
 	}
 
-	newReleaseYear := h.GetInputWithDefaultInt("Enter new Release Year (type -1 to keep current value): ", track.ReleaseYear)
+	newReleaseYear := h.GetInputIntWithConstraint("Enter new Release Year (type -1 to keep current value): ", track.ReleaseYear, 1900, time.Now().Year())
 	if newReleaseYear != -1 {
 		updatedTrack.ReleaseYear = newReleaseYear
 	}
 
-	newDuration := h.GetInputWithDefaultInt("Enter new Duration (in seconds) (type -1 to keep current value): ", track.Duration)
+	newDuration := h.GetInputIntWithConstraint("Enter new Duration (in seconds) (type -1 to keep current value): ", track.Duration, 0, 10000)
 	if newDuration != -1 {
 		updatedTrack.Duration = newDuration
 	}

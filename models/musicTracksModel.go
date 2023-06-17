@@ -1,6 +1,9 @@
 package models
 
-import "strings"
+import (
+	// "mms/database"
+	"strings"
+)
 
 type MusicTracks struct {
 	Tracks map[string]*MusicTrackItem
@@ -8,12 +11,13 @@ type MusicTracks struct {
 
 func NewMusicTracks(helpers Helpers) *MusicTracks {
 	return &MusicTracks{
-		Tracks: make(map[string]*MusicTrackItem),
+		Tracks: make(map[string]*MusicTrackItem,0),
 	}
 }
 
 func (m *MusicTracks) AddNewMusicTrack(mt *MusicTrackItem) {
 	m.Tracks[mt.ID] = mt
+	// database.SaveToDB[map[string]*MusicTrackItem]("tracks",m.Tracks)
 }
 
 func (m *MusicTracks) RemoveMusicTrack(mt *MusicTrackItem) {
@@ -49,6 +53,14 @@ func (m *MusicTracks) GetTrackByID(id string) *MusicTrackItem {
 		}
 	}
 	return nil
+}
+
+func (m *MusicTracks) loadMusicTracks(trackList []*MusicTrackItem)map[string]*MusicTrackItem{
+	musicTracks:= make(map[string]*MusicTrackItem, 0) 
+	for _, track := range trackList {
+		musicTracks[track.ID] = track
+	} 
+	return musicTracks
 }
 
 func (m *MusicTracks) SearchForTracksByTitle(title string) []*MusicTrackItem {
