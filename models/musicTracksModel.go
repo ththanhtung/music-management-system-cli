@@ -12,7 +12,7 @@ type MusicTracks struct {
 
 func NewMusicTracks(helpers Helpers) *MusicTracks {
 	tracks := &MusicTracks{}
-	tracksFromDB, _ := database.ReadFromDB[MusicTrackItem]("./database/tracks.json")
+	tracksFromDB, _ := database.ReadMapFromDB[MusicTrackItem]("./database/tracks.json")
 	tracks.Tracks = tracksFromDB
 	return tracks
 }
@@ -22,7 +22,7 @@ func (m *MusicTracks) AddNewMusicTrack(mt *MusicTrackItem) {
 		m.Tracks = make(map[string]*MusicTrackItem)
 	}
 	m.Tracks[mt.ID] = mt
-	err := database.SaveToDB[map[string]*MusicTrackItem]("./database/tracks.json", m.Tracks)
+	err := database.SaveMapToDB[map[string]*MusicTrackItem]("./database/tracks.json", m.Tracks)
 	if err != nil {
 		fmt.Printf("Error saving music tracks to DB: %v\n", err)
 	}
@@ -32,7 +32,7 @@ func (m *MusicTracks) RemoveMusicTrack(mt *MusicTrackItem) {
 	if _, ok := m.Tracks[mt.ID]; ok {
 		delete(m.Tracks, mt.ID)
 	}
-	err := database.SaveToDB[map[string]*MusicTrackItem]("./database/tracks.json", m.Tracks)
+	err := database.SaveMapToDB[map[string]*MusicTrackItem]("./database/tracks.json", m.Tracks)
 	if err != nil {
 		fmt.Printf("Error saving music tracks to DB: %v\n", err)
 	}
@@ -47,7 +47,7 @@ func (m *MusicTracks) UpdateMusicTrack(mt *MusicTrackItem, title, artist, album,
 		mt.ReleaseYear = releaseYear
 		mt.Duration = duration
 	}
-	err := database.SaveToDB[map[string]*MusicTrackItem]("./database/tracks.json", m.Tracks)
+	err := database.SaveMapToDB[map[string]*MusicTrackItem]("./database/tracks.json", m.Tracks)
 	if err != nil {
 		fmt.Printf("Error saving music tracks to DB: %v\n", err)
 	}

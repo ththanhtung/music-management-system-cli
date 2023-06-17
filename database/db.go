@@ -8,7 +8,7 @@ import (
 
 // for simplicity i will use json as database
 
-func ReadFromDB[T any](filename string) (map[string]*T, error) {
+func ReadMapFromDB[T any](filename string) (map[string]*T, error) {
 	// Read the JSON file
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -25,7 +25,7 @@ func ReadFromDB[T any](filename string) (map[string]*T, error) {
 	return tracks, nil
 }
 
-func SaveToDB[T any](filename string, item T) error {
+func SaveMapToDB[T any](filename string, item T) error {
 	// Write data to file
 	file, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
