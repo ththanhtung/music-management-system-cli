@@ -1,7 +1,8 @@
 package models
 
 import (
-	// "mms/database"
+	"fmt"
+	"mms/database"
 	"strings"
 )
 
@@ -10,19 +11,30 @@ type MusicTracks struct {
 }
 
 func NewMusicTracks(helpers Helpers) *MusicTracks {
-	return &MusicTracks{
-		Tracks: make(map[string]*MusicTrackItem,0),
-	}
+	tracks := &MusicTracks{}
+	tracksFromDB, _ := database.ReadFromDB[MusicTrackItem]("./database/tracks.json")
+	tracks.Tracks = tracksFromDB
+	return tracks
 }
 
 func (m *MusicTracks) AddNewMusicTrack(mt *MusicTrackItem) {
+	if m.Tracks == nil {
+		m.Tracks = make(map[string]*MusicTrackItem)
+	}
 	m.Tracks[mt.ID] = mt
-	// database.SaveToDB[map[string]*MusicTrackItem]("tracks",m.Tracks)
+	err := database.SaveToDB[map[string]*MusicTrackItem]("./database/tracks.json", m.Tracks)
+	if err != nil {
+		fmt.Printf("Error saving music tracks to DB: %v\n", err)
+	}
 }
 
 func (m *MusicTracks) RemoveMusicTrack(mt *MusicTrackItem) {
 	if _, ok := m.Tracks[mt.ID]; ok {
 		delete(m.Tracks, mt.ID)
+	}
+	err := database.SaveToDB[map[string]*MusicTrackItem]("./database/tracks.json", m.Tracks)
+	if err != nil {
+		fmt.Printf("Error saving music tracks to DB: %v\n", err)
 	}
 }
 
@@ -34,6 +46,10 @@ func (m *MusicTracks) UpdateMusicTrack(mt *MusicTrackItem, title, artist, album,
 		mt.Genre = genre
 		mt.ReleaseYear = releaseYear
 		mt.Duration = duration
+	}
+	err := database.SaveToDB[map[string]*MusicTrackItem]("./database/tracks.json", m.Tracks)
+	if err != nil {
+		fmt.Printf("Error saving music tracks to DB: %v\n", err)
 	}
 }
 
@@ -55,11 +71,11 @@ func (m *MusicTracks) GetTrackByID(id string) *MusicTrackItem {
 	return nil
 }
 
-func (m *MusicTracks) loadMusicTracks(trackList []*MusicTrackItem)map[string]*MusicTrackItem{
-	musicTracks:= make(map[string]*MusicTrackItem, 0) 
+func (m *MusicTracks) loadMusicTracks(trackList []*MusicTrackItem) map[string]*MusicTrackItem {
+	musicTracks := make(map[string]*MusicTrackItem, 0)
 	for _, track := range trackList {
 		musicTracks[track.ID] = track
-	} 
+	}
 	return musicTracks
 }
 

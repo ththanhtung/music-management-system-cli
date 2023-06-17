@@ -12,6 +12,10 @@ func NewController() *Controller {
 	return &Controller{}
 }
 
+func (c *Controller) Init() {
+	c.loop()
+}
+
 func (c *Controller) loop() {
 	helpers := helpers.NewHelper()
 
@@ -105,8 +109,4 @@ func (c *Controller) loop() {
 			fmt.Println("Invalid choice! Please enter a valid option.")
 		}
 	}
-}
-
-func (c *Controller) Init() {
-	c.loop()
 }
