@@ -14,9 +14,9 @@ func (h *Helper) GetInputInt(msg string) int {
 		_, err := fmt.Scanln(&input)
 
 		if err != nil {
-			fmt.Println("Invalid input, please enter a valid integer.")
 			// Clear the input buffer
 			h.ClearConsole()
+			fmt.Println("Invalid input, please enter a valid integer.")
 			continue
 		}
 		return input
