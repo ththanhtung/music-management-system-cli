@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"mms/database"
 	"strings"
@@ -27,7 +28,7 @@ func NewMusicLibrary(helpers Helpers) *MusicLibrary {
 	return musicLibraby
 }
 
-func (ml *MusicLibrary) AddTrackToPlaylist(trackName, playlistName string) {
+func (ml *MusicLibrary) AddTrackToPlaylist(trackName, playlistName string) error{
 	track := ml.MusicTracks.GetTrackByName(trackName)
 	playlist := ml.Playlists.GetPlaylistByName(playlistName)
 	ml.MusicLibraries = append(ml.MusicLibraries, &MusicLibraryItem{PlaylistID: playlist.ID, TrackID: track.ID})
@@ -36,7 +37,10 @@ func (ml *MusicLibrary) AddTrackToPlaylist(trackName, playlistName string) {
 	if ml.MusicLibraries == nil {
 		ml.MusicLibraries = make([]*MusicLibraryItem, 0)
 	}
-	database.SaveSliceToDB[MusicLibraryItem](librariesURI, ml.MusicLibraries)
+	if err := database.SaveSliceToDB[MusicLibraryItem](librariesURI, ml.MusicLibraries); err!=nil {
+		return errors.New("error saving library to DB")
+	}
+	return nil
 }
 
 func (ml *MusicLibrary) GetAllTrackFromPlaylist(playlistName string) []*MusicTrackItem {

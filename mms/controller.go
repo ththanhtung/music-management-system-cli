@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"mms/helpers"
 	"mms/models"
+	"strings"
 )
 
 type Controller struct{}
@@ -42,10 +43,15 @@ func (c *Controller) loop() {
 		switch choice {
 		case 1:
 			track := helpers.GetMusicTrackDetail()
-			library.MusicTracks.AddNewMusicTrack(track)
-			helpers.ClearConsole()
-			track.DisplayInfo()
-			fmt.Println("Music track added successfully!")
+			if err := library.MusicTracks.AddNewMusicTrack(track); err != nil {
+				helpers.ClearConsole()
+				fmt.Println(err.Error())
+			} else {
+				helpers.ClearConsole()
+				track.DisplayInfo()
+				fmt.Println("Music track added successfully!")
+			}
+
 		case 2:
 			search := helpers.GetInputString("Enter music track ID: ")
 			track := library.MusicTracks.GetTrackByID(search)
@@ -63,8 +69,13 @@ func (c *Controller) loop() {
 				fmt.Println("No music track found!")
 			} else {
 				updatedTrack := helpers.GetUpdatedMusicTrackDetail(track)
-				library.MusicTracks.UpdateMusicTrack(track, updatedTrack.Title, updatedTrack.Artist, updatedTrack.Album, updatedTrack.Genre, updatedTrack.ReleaseYear, updatedTrack.Duration)
-				fmt.Println("Music track updated successfully!")
+				if err := library.MusicTracks.UpdateMusicTrack(track, updatedTrack.Title, updatedTrack.Artist, updatedTrack.Album, updatedTrack.Genre, updatedTrack.ReleaseYear, updatedTrack.Duration); err != nil {
+					helpers.ClearConsole()
+					fmt.Println(err.Error())
+				} else {
+					helpers.ClearConsole()
+					fmt.Println("Music track updated successfully!")
+				}
 			}
 		case 4:
 			search := helpers.GetInputString("Enter music track ID: ")
@@ -73,8 +84,13 @@ func (c *Controller) loop() {
 			if track == nil {
 				fmt.Println("No music track found!")
 			} else {
-				library.MusicTracks.RemoveMusicTrack(track)
-				fmt.Println("Music track deleted successfully!")
+				if err := library.MusicTracks.RemoveMusicTrack(track); err != nil {
+					helpers.ClearConsole()
+					fmt.Println(err.Error())
+				} else {
+					helpers.ClearConsole()
+					fmt.Println("Music track deleted successfully!")
+				}
 			}
 		case 5:
 			helpers.ClearConsole()
@@ -84,7 +100,7 @@ func (c *Controller) loop() {
 			if err := library.Playlists.AddNewPlaylist(playlist); err != nil {
 				helpers.ClearConsole()
 				fmt.Println(err.Error())
-			}else{
+			} else {
 				helpers.ClearConsole()
 				playlist.DisplayInfo()
 				fmt.Println("Playlist created successfully!")
@@ -102,9 +118,13 @@ func (c *Controller) loop() {
 					helpers.ClearConsole()
 					fmt.Println("No playlist found!")
 				} else {
-					library.AddTrackToPlaylist(track.Title, playlist.Name)
-					helpers.ClearConsole()
-					fmt.Println(track.Title + " added to " + playlist.Name + " playlist successfully!")
+					if err := library.AddTrackToPlaylist(track.Title, playlist.Name); err != nil {
+						helpers.ClearConsole()
+						fmt.Println(err.Error())
+					} else {
+						helpers.ClearConsole()
+						fmt.Println(strings.ToUpper(track.Title) + " added to " + strings.ToUpper(playlist.Name) + " playlist successfully!")
+					}
 				}
 			}
 		case 8:
