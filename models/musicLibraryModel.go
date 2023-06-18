@@ -23,12 +23,12 @@ func NewMusicLibrary(helpers Helpers) *MusicLibrary {
 	musicLibraby := &MusicLibrary{}
 	musicLibraby.MusicTracks = NewMusicTracks(helpers)
 	musicLibraby.Playlists = NewPlaylists(helpers)
-	librariesFromDB,_:=database.ReadSliceFromDB[MusicLibraryItem](librariesURI)
+	librariesFromDB, _ := database.ReadSliceFromDB[MusicLibraryItem](librariesURI)
 	musicLibraby.MusicLibraries = librariesFromDB
 	return musicLibraby
 }
 
-func (ml *MusicLibrary) AddTrackToPlaylist(trackName, playlistName string) error{
+func (ml *MusicLibrary) AddTrackToPlaylist(trackName, playlistName string) error {
 	track := ml.MusicTracks.GetTrackByName(trackName)
 	playlist := ml.Playlists.GetPlaylistByName(playlistName)
 	ml.MusicLibraries = append(ml.MusicLibraries, &MusicLibraryItem{PlaylistID: playlist.ID, TrackID: track.ID})
@@ -37,7 +37,7 @@ func (ml *MusicLibrary) AddTrackToPlaylist(trackName, playlistName string) error
 	if ml.MusicLibraries == nil {
 		ml.MusicLibraries = make([]*MusicLibraryItem, 0)
 	}
-	if err := database.SaveSliceToDB[MusicLibraryItem](librariesURI, ml.MusicLibraries); err!=nil {
+	if err := database.SaveSliceToDB[MusicLibraryItem](librariesURI, ml.MusicLibraries); err != nil {
 		return errors.New("error saving library to DB")
 	}
 	return nil
@@ -71,9 +71,9 @@ func (ml *MusicLibrary) SearchTracksAndPlaylistsByTitle(searchTerm string) map[s
 
 	// Search for tracks
 	for _, track := range ml.MusicTracks.Tracks {
-	    if strings.Contains(strings.ToLower(track.Title), strings.ToLower(searchTerm)) {
-	        results["Tracks"] = append(results["Tracks"], track)
-	    }
+		if strings.Contains(strings.ToLower(track.Title), strings.ToLower(searchTerm)) {
+			results["Tracks"] = append(results["Tracks"], track)
+		}
 	}
 
 	// Search for playlists that contain the tracks
@@ -99,9 +99,9 @@ func (ml *MusicLibrary) SearchTracksAndPlaylistsByArtist(searchTerm string) map[
 
 	// Search for tracks
 	for _, track := range ml.MusicTracks.Tracks {
-	    if strings.Contains(strings.ToLower(track.Artist), strings.ToLower(searchTerm)) {
-	        results["Tracks"] = append(results["Tracks"], track)
-	    }
+		if strings.Contains(strings.ToLower(track.Artist), strings.ToLower(searchTerm)) {
+			results["Tracks"] = append(results["Tracks"], track)
+		}
 	}
 
 	// Search for playlists that contain the tracks
@@ -127,9 +127,9 @@ func (ml *MusicLibrary) SearchTracksAndPlaylistsByAlbum(searchTerm string) map[s
 
 	// Search for tracks
 	for _, track := range ml.MusicTracks.Tracks {
-	    if strings.Contains(strings.ToLower(track.Album), strings.ToLower(searchTerm)) {
-	        results["Tracks"] = append(results["Tracks"], track)
-	    }
+		if strings.Contains(strings.ToLower(track.Album), strings.ToLower(searchTerm)) {
+			results["Tracks"] = append(results["Tracks"], track)
+		}
 	}
 
 	// Search for playlists that contain the tracks
@@ -155,9 +155,9 @@ func (ml *MusicLibrary) SearchTracksAndPlaylistsByGenre(searchTerm string) map[s
 
 	// Search for tracks
 	for _, track := range ml.MusicTracks.Tracks {
-	    if strings.Contains(strings.ToLower(track.Genre), strings.ToLower(searchTerm)) {
-	        results["Tracks"] = append(results["Tracks"], track)
-	    }
+		if strings.Contains(strings.ToLower(track.Genre), strings.ToLower(searchTerm)) {
+			results["Tracks"] = append(results["Tracks"], track)
+		}
 	}
 
 	// Search for playlists that contain the tracks
@@ -168,10 +168,9 @@ func (ml *MusicLibrary) SearchTracksAndPlaylistsByGenre(searchTerm string) map[s
 				if track.(*MusicTrackItem).ID == libraryItem.TrackID {
 					// Get the playlist from the playlists map
 					playlist := ml.Playlists.GetPlaylistByID(libraryItem.PlaylistID)
-					_, ok := results["Playlists"]
-					if !ok {
-						results["Playlists"] = append(results["Playlists"], playlist)
-					}
+
+					results["Playlists"] = append(results["Playlists"], playlist)
+
 					results["TracksInPlaylists"] = append(results["TracksInPlaylists"], track)
 				}
 			}
@@ -184,12 +183,26 @@ func (ml *MusicLibrary) SearchTracksAndPlaylistsByGenre(searchTerm string) map[s
 func (ml *MusicLibrary) DisplayTrackAndLibrary(results map[string][]interface{}) {
 	fmt.Println("Tracks:")
 	for _, track := range results["Tracks"] {
-		fmt.Println("-",track.(*MusicTrackItem).Title)
+		fmt.Println("-", track.(*MusicTrackItem).Title)
 	}
-	fmt.Println("Playlists:")
+
+	// combine all track from one playlist
+	tracksInPlaylist := make(map[string][]*MusicTrackItem)
 	for i, playlist := range results["Playlists"] {
-		fmt.Println("-", playlist.(*PlaylistItem).Name)
-		tracksInPlaylist := results["TracksInPlaylists"][i].(*MusicTrackItem)
-		fmt.Println("  -", tracksInPlaylist.Title)
+		trackInPlaylist := results["TracksInPlaylists"][i].(*MusicTrackItem)
+		for _, libraries := range ml.MusicLibraries {
+			if libraries.PlaylistID == playlist.(*PlaylistItem).ID && libraries.TrackID == trackInPlaylist.ID {
+				tracksInPlaylist[libraries.PlaylistID] = append(tracksInPlaylist[libraries.PlaylistID], trackInPlaylist)
+			}
+		}
+	}
+
+	fmt.Println("Playlists:")
+	for playlistID, tracks := range tracksInPlaylist {
+		playlist := ml.Playlists.GetPlaylistByID(playlistID)
+		fmt.Println("-", playlist.Name)
+		for _, track := range tracks {
+			fmt.Println("  -", track.Title)
+		}
 	}
 }
