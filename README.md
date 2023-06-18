@@ -15,9 +15,16 @@
 In order to run this program you have to have setup and install Go Programming language in your machine
 ## Run Locally
 
-If you have Go already setup and install in your machine:
+If you have Go already setup and installed in your machine:
 ```bash
   go run main.go
+```
+If you have Docker already installed on your machine:
+```bash
+  docker pull thanhtung3172001/music-management-system-cli
+```
+```bash
+  docker container run -it thanhtung3172001/music-management-system-cli
 ```
 If you don't have Go already setup and install in your machine:
 - Go to this website to install Go runtime: https://go.dev/dl/
