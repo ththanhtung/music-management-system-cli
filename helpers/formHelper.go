@@ -76,6 +76,7 @@ func (h *Helper) GetPlaylistDetail() *models.PlaylistItem {
 
 func (h *Helper) SelectPlaylist(playlists *models.Playlists) *models.PlaylistItem {
 	fmt.Println("\n---- Select a Playlist ----")
+	// Display some minimum info so that the user can know the id of the playlist they want to add the track to
 	playlists.DisplayAll()
 
 	choice := h.GetInputInt("Enter playlist ID: ")

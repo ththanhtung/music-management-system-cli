@@ -42,7 +42,10 @@ func (c *Controller) loop() {
 
 		switch choice {
 		case 1:
+			// Display form to take track info
 			track := helpers.GetMusicTrackDetail()
+
+			// Add track to library
 			if err := library.MusicTracks.AddNewMusicTrack(track); err != nil {
 				helpers.ClearConsole()
 				fmt.Println(err.Error())
@@ -53,22 +56,32 @@ func (c *Controller) loop() {
 			}
 
 		case 2:
+			// Display form to take track id
 			search := helpers.GetInputString("Enter music track ID: ")
+
+			// Get track
 			track := library.MusicTracks.GetTrackByID(search)
 			helpers.ClearConsole()
 			if track == nil {
 				fmt.Println("No music track found!")
 			} else {
+				// Display track info
 				track.DisplayInfo()
 			}
 		case 3:
+			// Display form to take track id
 			search := helpers.GetInputString("Enter music track ID: ")
+
+			// Get track
 			track := library.MusicTracks.GetTrackByID(search)
 			helpers.ClearConsole()
 			if track == nil {
 				fmt.Println("No music track found!")
 			} else {
+				// Display form to take updated track info
 				updatedTrack := helpers.GetUpdatedMusicTrackDetail(track)
+
+				// Update track info
 				if err := library.MusicTracks.UpdateMusicTrack(track, updatedTrack.Title, updatedTrack.Artist, updatedTrack.Album, updatedTrack.Genre, updatedTrack.ReleaseYear, updatedTrack.Duration); err != nil {
 					helpers.ClearConsole()
 					fmt.Println(err.Error())
@@ -78,12 +91,16 @@ func (c *Controller) loop() {
 				}
 			}
 		case 4:
+			// Display form to take track id
 			search := helpers.GetInputString("Enter music track ID: ")
+
+			// Get track
 			track := library.MusicTracks.GetTrackByID(search)
 			helpers.ClearConsole()
 			if track == nil {
 				fmt.Println("No music track found!")
 			} else {
+				// Remove track
 				if err := library.MusicTracks.RemoveMusicTrack(track); err != nil {
 					helpers.ClearConsole()
 					fmt.Println(err.Error())
@@ -96,7 +113,10 @@ func (c *Controller) loop() {
 			helpers.ClearConsole()
 			library.MusicTracks.DisplayAll()
 		case 6:
+			// Display from to take playlist info
 			playlist := helpers.GetPlaylistDetail()
+
+			// Add playlist 
 			if err := library.Playlists.AddNewPlaylist(playlist); err != nil {
 				helpers.ClearConsole()
 				fmt.Println(err.Error())
@@ -106,9 +126,12 @@ func (c *Controller) loop() {
 				fmt.Println("Playlist created successfully!")
 			}
 		case 7:
+			// Display some minimum info (id - title - artist) so that the user can know the id of the track they want to add to a playlist
 			library.MusicTracks.DisplayMinimumInfoAll()
 			search := helpers.GetInputInt("Enter music track ID you want to add: ")
 			helpers.ClearConsole()
+
+			// Get track
 			track := library.MusicTracks.GetTrackByID(fmt.Sprint(search))
 			if track == nil {
 				fmt.Println("No music track found!")
@@ -118,6 +141,7 @@ func (c *Controller) loop() {
 					helpers.ClearConsole()
 					fmt.Println("No playlist found!")
 				} else {
+					// Add track to playlist
 					if err := library.AddTrackToPlaylist(track.Title, playlist.Name); err != nil {
 						helpers.ClearConsole()
 						fmt.Println(err.Error())
