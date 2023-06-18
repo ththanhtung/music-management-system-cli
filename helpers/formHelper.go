@@ -11,17 +11,17 @@ func (h *Helper) GetMusicTrackDetail() *models.MusicTrackItem {
 
 	fmt.Println("\n---- Add a New Music Track ----")
 
-	track.Title = h.GetInputStringWithConstraint("Enter Title: ", "default title", 1, 100)
+	track.Title = h.GetInputStringWithConstraint("Enter Title (leave blank for default value): ", "default title", 1, 100)
 
-	track.Artist = h.GetInputStringWithConstraint("Enter Artist: ", "default artist", 2, 100)
+	track.Artist = h.GetInputStringWithConstraint("Enter Artist (leave blank for default value): ", "default artist", 2, 100)
 
-	track.Album = h.GetInputStringWithConstraint("Enter Album: ", "default album", 1, 100)
+	track.Album = h.GetInputStringWithConstraint("Enter Album (leave blank for default value): ", "default album", 1, 100)
 
-	track.Genre = h.GetInputStringWithConstraint("Enter Genre: ", "default genre", 1, 100)
+	track.Genre = h.GetInputStringWithConstraint("Enter Genre (leave blank for default value): ", "default genre", 1, 100)
 
-	track.ReleaseYear = h.GetInputIntWithConstraint("Enter Release Year(1900-current year): ", time.Now().Year(), 1900, time.Now().Year())
+	track.ReleaseYear = h.GetInputIntWithConstraint("Enter Release Year(1900-current year) (enter -1 for default value): ", time.Now().Year(), 1900, time.Now().Year())
 
-	track.Duration = h.GetInputIntWithConstraint("Enter Duration (in seconds): ", 0, 0, 10000)
+	track.Duration = h.GetInputIntWithConstraint("Enter Duration (in seconds) (enter -1 for default value): ", 0, 0, 10000)
 
 	return track
 }

@@ -47,8 +47,8 @@ func (c *Controller) loop() {
 			track.DisplayInfo()
 			fmt.Println("Music track added successfully!")
 		case 2:
-			search := helpers.GetInputString("Enter music track name: ")
-			track := library.MusicTracks.GetTrackByName(search)
+			search := helpers.GetInputString("Enter music track ID: ")
+			track := library.MusicTracks.GetTrackByID(search)
 			helpers.ClearConsole()
 			if track == nil {
 				fmt.Println("No music track found!")
@@ -63,12 +63,12 @@ func (c *Controller) loop() {
 				fmt.Println("No music track found!")
 			} else {
 				updatedTrack := helpers.GetUpdatedMusicTrackDetail(track)
-				library.MusicTracks.UpdateMusicTrack(track, updatedTrack.Title,updatedTrack.Artist,updatedTrack.Album,updatedTrack.Genre,updatedTrack.ReleaseYear, updatedTrack.Duration)
+				library.MusicTracks.UpdateMusicTrack(track, updatedTrack.Title, updatedTrack.Artist, updatedTrack.Album, updatedTrack.Genre, updatedTrack.ReleaseYear, updatedTrack.Duration)
 				fmt.Println("Music track updated successfully!")
 			}
 		case 4:
-			search := helpers.GetInputString("Enter music track name: ")
-			track := library.MusicTracks.GetTrackByName(search)
+			search := helpers.GetInputString("Enter music track ID: ")
+			track := library.MusicTracks.GetTrackByID(search)
 			helpers.ClearConsole()
 			if track == nil {
 				fmt.Println("No music track found!")
@@ -84,7 +84,8 @@ func (c *Controller) loop() {
 			playlist := helpers.GetPlaylistDetail()
 			library.Playlists.AddNewPlaylist(playlist)
 			helpers.ClearConsole()
-			fmt.Println("Playlist created successfully!", playlist.ID)
+			playlist.DisplayInfo()
+			fmt.Println("Playlist created successfully!")
 		case 7:
 			library.MusicTracks.DisplayMinimumInfoAll()
 			search := helpers.GetInputInt("Enter music track ID you want to add: ")
@@ -100,7 +101,7 @@ func (c *Controller) loop() {
 				} else {
 					library.AddTrackToPlaylist(track.Title, playlist.Name)
 					helpers.ClearConsole()
-					fmt.Println("Track added to playlist successfully!")
+					fmt.Println(track.Title + " added to " + playlist.Name + " playlist successfully!")
 				}
 			}
 		case 8:
