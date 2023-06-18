@@ -25,12 +25,6 @@ func NewMusicLibrary(helpers Helpers) *MusicLibrary {
 	librariesFromDB,_:=database.ReadSliceFromDB[MusicLibraryItem](librariesURI)
 	musicLibraby.MusicLibraries = librariesFromDB
 	return musicLibraby
-
-	// return &MusicLibrary{
-	// 	MusicTracks:    NewMusicTracks(helpers),
-	// 	Playlists:      NewPlaylists(helpers),
-	// 	MusicLibraries: make([]*MusicLibraryItem, 0),
-	// }
 }
 
 func (ml *MusicLibrary) AddTrackToPlaylist(trackName, playlistName string) {
@@ -186,7 +180,7 @@ func (ml *MusicLibrary) SearchTracksAndPlaylistsByGenre(searchTerm string) map[s
 func (ml *MusicLibrary) DisplayTrackAndLibrary(results map[string][]interface{}) {
 	fmt.Println("Tracks:")
 	for _, track := range results["Tracks"] {
-		fmt.Println(track.(*MusicTrackItem).Title)
+		fmt.Println("-",track.(*MusicTrackItem).Title)
 	}
 	fmt.Println("Playlists:")
 	for i, playlist := range results["Playlists"] {

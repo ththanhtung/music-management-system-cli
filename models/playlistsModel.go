@@ -62,14 +62,6 @@ func (p *Playlists) GetPlaylistByID(id string) *PlaylistItem {
 	return nil
 }
 
-func loadPlaylists(playlistList []*PlaylistItem) map[string]*PlaylistItem {
-	playlists := make(map[string]*PlaylistItem, 0)
-	for _, playlist := range playlistList {
-		playlists[playlist.ID] = playlist
-	}
-	return playlists
-}
-
 func (p *Playlists) DisplayAll(){
 	for _, playlist := range p.Playlists {
 		playlist.DisplayInfo()
