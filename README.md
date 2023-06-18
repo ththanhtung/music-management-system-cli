@@ -26,7 +26,7 @@ If you have Docker already installed on your machine:
 ```bash
   docker container run -it thanhtung3172001/music-management-system-cli
 ```
-If you don't have Go already setup and install in your machine:
+If you don't have Go and Docker already setup and install in your machine:
 - Go to this website to install Go runtime: https://go.dev/dl/
 - Then just run the program and press next
 - Now you can run this command: ```go run main.go ```
