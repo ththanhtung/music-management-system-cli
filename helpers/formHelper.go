@@ -91,6 +91,7 @@ func (h *Helper) SearchForTrackAndPlaylist(ml *models.MusicLibrary) {
 	fmt.Println("2. Search by artist")
 	fmt.Println("3. Search by album")
 	fmt.Println("4. Search by genre")
+	fmt.Println("5. Go back")
 
 	choice := h.GetInputInt("Enter your choice: ")
 
@@ -111,5 +112,8 @@ func (h *Helper) SearchForTrackAndPlaylist(ml *models.MusicLibrary) {
 		title := h.GetInputString("Enter genre: ")
 		result := ml.SearchTracksAndPlaylistsByGenre(title)
 		ml.DisplayTrackAndLibrary(result)
+	case 5:
+		h.ClearConsole()
+		return
 	}
 }
