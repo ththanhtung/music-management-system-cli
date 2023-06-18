@@ -80,12 +80,15 @@ func (c *Controller) loop() {
 			helpers.ClearConsole()
 			library.MusicTracks.DisplayAll()
 		case 6:
-
 			playlist := helpers.GetPlaylistDetail()
-			library.Playlists.AddNewPlaylist(playlist)
-			helpers.ClearConsole()
-			playlist.DisplayInfo()
-			fmt.Println("Playlist created successfully!")
+			if err := library.Playlists.AddNewPlaylist(playlist); err != nil {
+				helpers.ClearConsole()
+				fmt.Println(err.Error())
+			}else{
+				helpers.ClearConsole()
+				playlist.DisplayInfo()
+				fmt.Println("Playlist created successfully!")
+			}
 		case 7:
 			library.MusicTracks.DisplayMinimumInfoAll()
 			search := helpers.GetInputInt("Enter music track ID you want to add: ")

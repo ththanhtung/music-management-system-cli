@@ -45,6 +45,7 @@ func (h *Helper) GetInputWithDefaultString(msg, defaultValue string) string {
 	}
 	return input
 }
+
 func (h *Helper) GetInputWithDefaultInt(msg string, defaultValue int) int {
 	for {
 		fmt.Print(msg)
