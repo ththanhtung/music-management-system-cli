@@ -92,22 +92,27 @@ func (h *Helper) SearchForTrackAndPlaylist(ml *models.MusicLibrary) {
 	fmt.Println("5. Go back")
 
 	choice := h.GetInputInt("Enter your choice: ")
+	h.ClearConsole()
 
 	switch choice {
 	case 1:
-		title := h.GetInputString("Enter track's title: ")
+		//set "default value"+fmt.Sprint(time.Now()) as default value to avoid unwanted match
+		title := h.GetInputStringWithConstraint("Enter track's title: ", "default value"+fmt.Sprint(time.Now()), 2, 100)
 		result := ml.SearchTracksAndPlaylistsByTitle(title)
 		ml.DisplayTrackAndLibrary(result)
 	case 2:
-		title := h.GetInputString("Enter artist: ")
+		//set "default value"+fmt.Sprint(time.Now()) as default value to avoid unwanted match
+		title := h.GetInputStringWithConstraint("Enter artist: ", "default value"+fmt.Sprint(time.Now()), 1, 100)
 		result := ml.SearchTracksAndPlaylistsByArtist(title)
 		ml.DisplayTrackAndLibrary(result)
 	case 3:
-		title := h.GetInputString("Enter album: ")
+		//set "default value"+fmt.Sprint(time.Now()) as default value to avoid unwanted match
+		title := h.GetInputStringWithConstraint("Enter album: ", "default value"+fmt.Sprint(time.Now()), 1, 100)
 		result := ml.SearchTracksAndPlaylistsByAlbum(title)
 		ml.DisplayTrackAndLibrary(result)
 	case 4:
-		title := h.GetInputString("Enter genre: ")
+		//set "default value"+fmt.Sprint(time.Now()) as default value to avoid unwanted match
+		title := h.GetInputStringWithConstraint("Enter genre: ", "default value"+fmt.Sprint(time.Now()), 1, 100)
 		result := ml.SearchTracksAndPlaylistsByGenre(title)
 		ml.DisplayTrackAndLibrary(result)
 	case 5:

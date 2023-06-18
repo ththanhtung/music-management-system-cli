@@ -44,6 +44,7 @@ func (c *Controller) loop() {
 			track := helpers.GetMusicTrackDetail()
 			library.MusicTracks.AddNewMusicTrack(track)
 			helpers.ClearConsole()
+			track.DisplayInfo()
 			fmt.Println("Music track added successfully!")
 		case 2:
 			search := helpers.GetInputString("Enter music track name: ")
@@ -55,8 +56,8 @@ func (c *Controller) loop() {
 				track.DisplayInfo()
 			}
 		case 3:
-			search := helpers.GetInputString("Enter music track name: ")
-			track := library.MusicTracks.GetTrackByName(search)
+			search := helpers.GetInputString("Enter music track ID: ")
+			track := library.MusicTracks.GetTrackByID(search)
 			helpers.ClearConsole()
 			if track == nil {
 				fmt.Println("No music track found!")
