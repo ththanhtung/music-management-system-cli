@@ -69,3 +69,9 @@ func loadPlaylists(playlistList []*PlaylistItem) map[string]*PlaylistItem {
 	}
 	return playlists
 }
+
+func (p *Playlists) DisplayAll(){
+	for _, playlist := range p.Playlists {
+		playlist.DisplayInfo()
+	}
+}

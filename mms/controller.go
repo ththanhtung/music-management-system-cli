@@ -85,17 +85,20 @@ func (c *Controller) loop() {
 			helpers.ClearConsole()
 			fmt.Println("Playlist created successfully!", playlist.ID)
 		case 7:
-			search := helpers.GetInputString("Enter music track you want to add: ")
-			track := library.MusicTracks.GetTrackByName(search)
+			library.MusicTracks.DisplayMinimumInfoAll()
+			search := helpers.GetInputInt("Enter music track ID you want to add: ")
 			helpers.ClearConsole()
+			track := library.MusicTracks.GetTrackByID(fmt.Sprint(search))
 			if track == nil {
 				fmt.Println("No music track found!")
 			} else {
 				playlist := helpers.SelectPlaylist(library.Playlists)
 				if playlist == nil {
+					helpers.ClearConsole()
 					fmt.Println("No playlist found!")
 				} else {
 					library.AddTrackToPlaylist(track.Title, playlist.Name)
+					helpers.ClearConsole()
 					fmt.Println("Track added to playlist successfully!")
 				}
 			}

@@ -126,3 +126,10 @@ func (m *MusicTracks) DisplayAll() {
 		track.DisplayInfo()
 	}
 }
+
+func (m *MusicTracks) DisplayMinimumInfoAll() {
+	fmt.Println("ID - Title - Artist")
+	for _, track := range m.Tracks {
+		track.DisplayMinimumInfo()
+	}
+}

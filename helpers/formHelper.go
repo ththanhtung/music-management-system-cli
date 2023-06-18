@@ -76,9 +76,7 @@ func (h *Helper) GetPlaylistDetail() *models.PlaylistItem {
 
 func (h *Helper) SelectPlaylist(playlists *models.Playlists) *models.PlaylistItem {
 	fmt.Println("\n---- Select a Playlist ----")
-	for _, playlist := range playlists.Playlists {
-		fmt.Println(playlist.ID, "-", playlist.Name)
-	}
+	playlists.DisplayAll()
 
 	choice := h.GetInputInt("Enter playlist ID: ")
 
