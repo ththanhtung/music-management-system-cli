@@ -3,6 +3,7 @@ package models
 import (
 	"errors"
 	"fmt"
+	"log"
 	"mms/database"
 	"strings"
 )
@@ -15,12 +16,15 @@ var playlistURI string = "./database/playlists.json"
 
 func NewPlaylists(helpers Helpers) *Playlists {
 	playlists := &Playlists{}
-	playlistsFromDB, _ := database.ReadMapFromDB[PlaylistItem](playlistURI)
+	playlistsFromDB, err := database.ReadMapFromDB[PlaylistItem](playlistURI)
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
 	playlists.Playlists = playlistsFromDB
 	return playlists
 }
 
-func (p *Playlists) AddNewPlaylist(pl *PlaylistItem) error{
+func (p *Playlists) AddNewPlaylist(pl *PlaylistItem) error {
 	if p.Playlists == nil {
 		p.Playlists = make(map[string]*PlaylistItem)
 	}
@@ -29,7 +33,7 @@ func (p *Playlists) AddNewPlaylist(pl *PlaylistItem) error{
 	_, ok := p.Playlists[pl.ID]
 	if !ok {
 		// a user cannot create 2 or more playlist with the same name
-		if !p.CheckDuplicatePlaylist(pl.Name){
+		if !p.CheckDuplicatePlaylist(pl.Name) {
 			p.Playlists[pl.ID] = pl
 			err := database.SaveMapToDB[map[string]*PlaylistItem](playlistURI, p.Playlists)
 			if err != nil {
@@ -69,15 +73,15 @@ func (p *Playlists) GetPlaylistByID(id string) *PlaylistItem {
 	return nil
 }
 
-func (p *Playlists) DisplayAll(){
+func (p *Playlists) DisplayAll() {
 	for _, playlist := range p.Playlists {
 		playlist.DisplayInfo()
 	}
 }
 
-func (p *Playlists) CheckDuplicatePlaylist(playlistName string) bool{
-	for _, playlist := range p.Playlists{
-		if strings.EqualFold(strings.ToLower(playlist.Name), strings.ToLower(playlistName)){
+func (p *Playlists) CheckDuplicatePlaylist(playlistName string) bool {
+	for _, playlist := range p.Playlists {
+		if strings.EqualFold(strings.ToLower(playlist.Name), strings.ToLower(playlistName)) {
 			return true
 		}
 	}

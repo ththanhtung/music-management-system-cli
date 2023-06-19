@@ -3,6 +3,7 @@ package models
 import (
 	"errors"
 	"fmt"
+	"log"
 	"mms/database"
 	"strings"
 )
@@ -11,16 +12,19 @@ type MusicTracks struct {
 	Tracks map[string]*MusicTrackItem
 }
 
-var tracksURI string = "./database/tracks.json" 
+var tracksURI string = "./database/tracks.json"
 
 func NewMusicTracks(helpers Helpers) *MusicTracks {
 	tracks := &MusicTracks{}
-	tracksFromDB, _ := database.ReadMapFromDB[MusicTrackItem](tracksURI)
+	tracksFromDB, err := database.ReadMapFromDB[MusicTrackItem](tracksURI)
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
 	tracks.Tracks = tracksFromDB
 	return tracks
 }
 
-func (m *MusicTracks) AddNewMusicTrack(mt *MusicTrackItem) error{
+func (m *MusicTracks) AddNewMusicTrack(mt *MusicTrackItem) error {
 	if m.Tracks == nil {
 		m.Tracks = make(map[string]*MusicTrackItem)
 	}
@@ -45,7 +49,7 @@ func (m *MusicTracks) RemoveMusicTrack(mt *MusicTrackItem) error {
 	return nil
 }
 
-func (m *MusicTracks) UpdateMusicTrack(mt *MusicTrackItem, title, artist, album, genre string, releaseYear, duration int) error{
+func (m *MusicTracks) UpdateMusicTrack(mt *MusicTrackItem, title, artist, album, genre string, releaseYear, duration int) error {
 	if _, ok := m.Tracks[mt.ID]; ok {
 		mt.Title = title
 		mt.Artist = artist

@@ -3,6 +3,7 @@ package models
 import (
 	"errors"
 	"fmt"
+	"log"
 	"mms/database"
 	"strings"
 )
@@ -23,7 +24,10 @@ func NewMusicLibrary(helpers Helpers) *MusicLibrary {
 	musicLibraby := &MusicLibrary{}
 	musicLibraby.MusicTracks = NewMusicTracks(helpers)
 	musicLibraby.Playlists = NewPlaylists(helpers)
-	librariesFromDB, _ := database.ReadSliceFromDB[MusicLibraryItem](librariesURI)
+	librariesFromDB, err := database.ReadSliceFromDB[MusicLibraryItem](librariesURI)
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
 	musicLibraby.MusicLibraries = librariesFromDB
 	return musicLibraby
 }
